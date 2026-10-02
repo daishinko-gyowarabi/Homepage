@@ -1,0 +1,10 @@
+{
+  // Cloudflare の設定ファイル（サイト本体は public フォルダ）
+  "name": "homepage",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./public",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

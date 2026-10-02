@@ -2,10 +2,11 @@
 
 https://daishinkogyo-warabi.com/
 
-HTML・CSS・JavaScript だけで作った静的サイトです。
-GitHub の `main` ブランチを更新すると、Cloudflare Pages が自動でサイトに反映します（1〜2分）。
+HTML・CSS・JavaScript だけで作った静的サイトです。サイト本体は `public` フォルダに入っています。
+GitHub の `main` ブランチを更新すると、Cloudflare（Workers）が自動でサイトに反映します（1〜2分）。
+設定は `wrangler.jsonc` にあります。
 
-## ファイル構成
+## ファイル構成（`public` フォルダの中）
 
 | ファイル | 内容 |
 |---|---|
@@ -21,13 +22,13 @@ GitHub の `main` ブランチを更新すると、Cloudflare Pages が自動で
 | `js/form.js` / `js/form-config.js` | フォームの確認画面・送信と、その設定 |
 | `assets/img/` | 画像（施工実績の写真は `assets/img/works/`） |
 | `sitemap.xml` / `robots.txt` | 検索エンジン向けの設定 |
-| `_headers` / `_redirects` | Cloudflare Pages 用の設定（キャッシュ、www なしへの転送） |
+| `_headers` / `_redirects` | Cloudflare 用の設定（キャッシュ、www なしへの転送） |
 
 ## よくある更新
 
 ### 施工実績を追加する
-1. 写真を `assets/img/works/` に入れる（例：`work-05.jpg`。横長・幅1600px程度がおすすめ）
-2. `js/works-data.js` に事例を1件追加し、`img` に `/assets/img/works/work-05.jpg` と書く
+1. 写真を `public/assets/img/works/` に入れる（例：`work-05.jpg`。横長・幅1600px程度がおすすめ）
+2. `public/js/works-data.js` に事例を1件追加し、`img` に `/assets/img/works/work-05.jpg` と書く
 3. 保存して GitHub に反映
 
 `cat`（分類）に「塗装工事」「防水工事」などを入れると、一覧の上に絞り込みボタンが自動で出ます。
@@ -44,7 +45,7 @@ GitHub の `main` ブランチを更新すると、Cloudflare Pages が自動で
 フォームの内容は [Web3Forms](https://web3forms.com)（無料・月250件まで）経由でメールに届きます。
 
 1. https://web3forms.com を開き、受信したいメールアドレスを入力して Access Key を受け取る
-2. `js/form-config.js` の `accessKey: ""` の `""` の中にキーを貼り付ける
+2. `public/js/form-config.js` の `accessKey: ""` の `""` の中にキーを貼り付ける
 3. GitHub に反映
 
 キーが未設定の間は、送信ボタンを押すと「お電話でお問い合わせください」と案内が出ます。
@@ -52,6 +53,5 @@ GitHub の `main` ブランチを更新すると、Cloudflare Pages が自動で
 ## 手元で確認する
 
 ```bash
-npx wrangler pages dev .
+npx wrangler dev
 ```
-（または `python3 -m http.server` で開き、`/company.html` のように `.html` 付きで確認）
