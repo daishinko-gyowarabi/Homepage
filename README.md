@@ -22,7 +22,7 @@ GitHub の `main` ブランチを更新すると、Cloudflare（Workers）が自
 | `js/form.js` / `js/form-config.js` | フォームの確認画面・送信と、その設定 |
 | `assets/img/` | 画像（施工実績の写真は `assets/img/works/`） |
 | `sitemap.xml` / `robots.txt` | 検索エンジン向けの設定 |
-| `_headers` / `_redirects` | Cloudflare 用の設定（キャッシュ、www なしへの転送） |
+| `_headers` | Cloudflare 用の設定（キャッシュ・セキュリティ） |
 
 ## よくある更新
 
