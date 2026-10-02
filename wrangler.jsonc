@@ -4,6 +4,10 @@
   "compatibility_date": "2026-09-01",
   "workers_dev": true,
   "preview_urls": true,
+  "routes": [
+    { "pattern": "daishinkogyo-warabi.com", "custom_domain": true },
+    { "pattern": "www.daishinkogyo-warabi.com", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./public",
     "html_handling": "auto-trailing-slash",
