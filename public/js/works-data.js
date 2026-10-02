@@ -15,25 +15,18 @@
  *   img      … 写真のパス。写真は assets/img/works/ に入れてください
  *              （例："/assets/img/works/work-05.jpg"）
  */
-window.WORKS = [
-  {
-    cat: "", client: "施工事例 01",
-    place: "", building: "", work: "", period: "", done: "", note: "",
-    img: "https://drive.google.com/thumbnail?id=1N0991jT3kiz9u24SLmdAVh_YTQFns--7&sz=w1600"
-  },
-  {
-    cat: "", client: "施工事例 02",
-    place: "", building: "", work: "", period: "", done: "", note: "",
-    img: "https://drive.google.com/thumbnail?id=1drTsofVn75OrSIytufQGJzSRVeyqY7ID&sz=w1600"
-  },
-  {
-    cat: "", client: "施工事例 03",
-    place: "", building: "", work: "", period: "", done: "", note: "",
-    img: "https://drive.google.com/thumbnail?id=1Z3sS1h0lTXLKmHbGrUmHm-EKqgTygTky&sz=w1600"
-  },
-  {
-    cat: "", client: "施工事例 04",
-    place: "", building: "", work: "", period: "", done: "", note: "",
-    img: "https://drive.google.com/thumbnail?id=1O9oR0UnKyRSE_aKyTY99QIlCghVu4fO2&sz=w1600"
-  }
-];
+/*
+ * 記入例（先頭の // を外すと表示されます）
+ *
+ * window.WORKS = [
+ *   {
+ *     cat: "塗装工事", client: "蕨市 S様邸",
+ *     place: "埼玉県蕨市", building: "戸建住宅", work: "外壁塗装・屋根塗装",
+ *     period: "約2週間", done: "2026年5月", note: "",
+ *     img: "/assets/img/works/work-01.jpg"
+ *   },
+ * ];
+ */
+
+// 現在は施工実績を掲載していません（一覧には「準備中」と表示されます）
+window.WORKS = [];
