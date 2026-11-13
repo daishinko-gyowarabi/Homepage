@@ -1,0 +1,35 @@
+# インスタへの投稿（人が確認してOKした事例だけ、手動で実行する）
+name: インスタ投稿
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: '事例の slug（例 2026-11-warabi-s）。--check ならアカウント確認だけ'
+        required: true
+      post:
+        description: '本当に投稿する（いいえ＝確認だけ）'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 投稿
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_API: ${{ vars.IG_API || 'graph.instagram.com' }}
+          SITE_URL: ${{ vars.SITE_URL || 'https://homepage.daishinkogyo-warabi.workers.dev' }}
+          SLUG: ${{ inputs.slug }}
+          YES: ${{ inputs.post && '--yes' || '' }}
+        run: python3 tools/works/ig_post.py "$SLUG" $YES
+      - name: 投稿の記録を残す
+        if: inputs.post
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add tools/works/drafts
+          git diff --cached --quiet || (git commit -m "インスタ投稿の記録" && git push)
