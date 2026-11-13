@@ -18,7 +18,9 @@ case.json の例（写真のパスは case.json から見た相対パスか絶�
     "process": [["photos/p1.jpg", "高圧洗浄"], ["photos/p2.jpg", "下塗り"]],
     "after": ["photos/after2.jpg"]
   },
-  "blur": {"photos/before1.jpg": [[0.1, 0.7, 0.3, 0.8]]},   # 表札・ナンバー等を隠す範囲（幅・高さに対する割合 x1,y1,x2,y2）
+  "crop_all": [0, 0, 0.62, 1],            # 全部の写真を切り取る範囲（右下の黒板を消す。割合 x1,y1,x2,y2）
+  "crop": {"photos/p1.jpg": [0, 0, 1, 0.6]},   # 写真ごとの切り取り（crop_all より優先。null なら切り取らない）
+  "blur": {"photos/before1.jpg": [[0.1, 0.7, 0.3, 0.8]]},   # 切り取った後の写真に対する範囲   # 表札・ナンバー等を隠す
   "caption_extra": ""                     # 投稿文に足したい一言（任意）
 }
 
@@ -62,9 +64,12 @@ def font(size, weight='Bold'):
     return ImageFont.load_default()
 
 
-def load(path, base, blur):
+def load(path, base, blur, crop=None):
     p = path if os.path.isabs(path) else os.path.join(base, path)
     im = ImageOps.exif_transpose(Image.open(p)).convert('RGB')
+    if crop:
+        x1, y1, x2, y2 = crop
+        im = im.crop((int(x1 * im.width), int(y1 * im.height), int(x2 * im.width), int(y2 * im.height)))
     for x1, y1, x2, y2 in blur.get(path, []):
         box = tuple(int(v) for v in (x1 * im.width, y1 * im.height, x2 * im.width, y2 * im.height))
         im.paste(im.crop(box).filter(ImageFilter.GaussianBlur(max(12, im.width // 60))), box)
@@ -183,7 +188,8 @@ def main():
         if not c.get(k): sys.exit(f'{k} が空です')
     if re.search(r'[一-龥ぁ-んァ-ン]{2,}様', c['client']): sys.exit('client にお客様の実名が入っていないか確認してください（「S様邸」のようにイニシャルで）')
     ph, blur = c['photos'], c.get('blur', {})
-    get = lambda p: load(p, base, blur)
+    crops = c.get('crop', {})
+    get = lambda p: load(p, base, blur, crops.get(p, c.get('crop_all')))
 
     cover = get(ph['cover'])
     slides = [('表紙', lambda n: slide_cover(cover, c, n))]
