@@ -21,7 +21,7 @@ jobs:
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_API: ${{ vars.IG_API || 'graph.instagram.com' }}
+          IG_API: ${{ vars.IG_API }}
           SITE_URL: ${{ vars.SITE_URL || 'https://homepage.daishinkogyo-warabi.workers.dev' }}
           SLUG: ${{ inputs.slug }}
           YES: ${{ inputs.post && '--yes' || '' }}

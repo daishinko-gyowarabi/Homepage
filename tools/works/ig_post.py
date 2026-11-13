@@ -16,9 +16,11 @@ import json, os, sys, time, urllib.error, urllib.parse, urllib.request
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 DRAFTS = os.path.join(ROOT, 'tools', 'works', 'drafts')
-API = 'https://' + os.environ.get('IG_API', 'graph.instagram.com') + '/v23.0'
 SITE = os.environ.get('SITE_URL', 'https://homepage.daishinkogyo-warabi.workers.dev').rstrip('/')
-TOKEN = os.environ.get('IG_TOKEN', '')
+TOKEN = os.environ.get('IG_TOKEN', '').strip()
+# Instagram ログインの鍵は IGAA…、ビジネス（システムユーザー）の鍵は EAA… で始まる
+API = 'https://' + (os.environ.get('IG_API') or ('graph.instagram.com' if TOKEN.startswith('IG') else 'graph.facebook.com')) + '/v23.0'
+IG_USER_ID = os.environ.get('IG_USER_ID') or '17841464435684827'   # @daishinkogyo.warabi
 
 
 def call(method, path, **params):
@@ -35,7 +37,7 @@ def call(method, path, **params):
 
 
 def me():
-    uid = os.environ.get('IG_USER_ID') or 'me'
+    uid = 'me' if 'graph.instagram.com' in API else IG_USER_ID
     r = call('GET', uid, fields='id,username')
     print(f"アカウント：@{r.get('username')}（ID {r['id']}）")
     return r['id']
