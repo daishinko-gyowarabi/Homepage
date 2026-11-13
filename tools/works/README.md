@@ -41,18 +41,20 @@ python3 tools/works/make_case.py /home/claude/cases/<slug>/case.json
 - ホームページ：OK が出たら main にマージして push（1〜2分で本番に出る）
 - インスタ：本番に出た後、依頼者が投稿をOKしたら GitHub Actions の「インスタ投稿」を実行する
   ```
-  gh workflow run instagram.yml -f slug=<slug> -f post=false   # 確認だけ
-  gh workflow run instagram.yml -f slug=<slug> -f post=true    # 投稿
+  （実行方法は下の「インスタ連携」）
   ```
-  結果は `gh run watch` で見て、投稿のURLを伝える。二重投稿はツールが止める
+  二重投稿はツールが止める
 
-## インスタ連携の準備（最初に一度だけ・依頼者と一緒に）
-1. インスタのアカウント（@daishinkogyo.warabi）を「プロアカウント（ビジネス）」に切り替える
-2. Meta for Developers でアプリを作り、「Instagram API（Instagram ログイン）」を追加してアクセストークンを発行する
-3. トークンは**チャットに貼らず**、依頼者自身が GitHub のリポジトリ設定 → Secrets and variables → Actions に
-   `IG_TOKEN`（必要なら `IG_USER_ID`）として登録する
-4. `gh workflow run instagram.yml -f slug=--check -f post=false` で確認
-- 長期トークンは60日で切れる。期限が近づいたら作り直して Secrets を更新する
+## インスタ連携（2026-11-13 設定済み）
+- インスタ @daishinkogyo.warabi はビジネス用アカウント（業種：建設会社）
+- Meta アプリ daishin-works-post（ID 1119751860880138）／ビジネスポートフォリオ「有限会社大伸工業」／インスタID 17841464435684827
+- 鍵は期限なしのシステムユーザーの鍵。GitHub の Secrets に `IG_TOKEN` として登録済み（チャットや画面に出さない）
+- `gh workflow run` は使えないので、REST で実行する：
+  ```
+  gh api -X POST repos/daishinko-gyowarabi/Homepage/actions/workflows/instagram.yml/dispatches -f ref=main -f 'inputs[slug]=<slug>' -F 'inputs[post]=false'   # 確認だけ（true で投稿）
+  ```
+  結果は actions/runs と jobs/<id>/logs で見て、投稿のURLを伝える
+- 鍵を作り直すときは Meta アプリのユースケース「Instagramでメッセージとコンテンツを管理」→「2. アクセストークンを生成する」
 - 独自ドメインが表示できるようになったら、リポジトリの Variables に `SITE_URL=https://daishinkogyo-warabi.com` を登録する
 
 ## メモのひな形（現場フォルダに入れてもらう）
